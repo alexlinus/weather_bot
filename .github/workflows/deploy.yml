@@ -1,0 +1,52 @@
+name: Deploy
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Copy repository contents via scp
+      uses: appleboy/scp-action@master
+      with:
+        HOST: ${{ secrets.SERVER_IP }}
+        USERNAME: ${{ secrets.SERVER_USER }}
+        PORT: ${{ secrets.SERVER_PORT }}
+        KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        # flag -p tells us to create all internal directories
+        script: mkdir -p /home/root_projects/weather_bot
+        source: "."
+        target: "/home/root_projects/weather_bot"
+
+    - name: Executing remote command
+      uses: appleboy/ssh-action@master
+      env:
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        VISUAL_CROSSING_API_KEY: ${{ secrets.VISUAL_CROSSING_API_KEY }}
+      with:
+        HOST: ${{ secrets.SERVER_IP }}
+        USERNAME: ${{ secrets.SERVER_USER }}
+        PORT: ${{ secrets.SERVER_PORT }}
+        KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /home/root_projects/weather_bot
+          export POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}"
+          export TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}"
+          export VISUAL_CROSSING_API_KEY="${{ secrets.VISUAL_CROSSING_API_KEY }}"
+          export POSTGRES_DB="${{ vars.POSTGRES_DB }}"
+          export POSTGRES_HOST="${{ vars.POSTGRES_HOST }}"
+          export POSTGRES_PORT="${{ vars.POSTGRES_PORT }}"
+          export POSTGRES_USER="${{ vars.POSTGRES_USER }}"
+          export REDIS_HOST="${{ vars.REDIS_HOST }}"
+          export REDIS_PORT="${{ vars.REDIS_PORT }}"
+          docker-compose build
+          # Stop previous version
+          docker-compose stop
+          docker-compose up -d
+
+
+

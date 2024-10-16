@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   bot:
@@ -37,6 +37,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - VISUAL_CROSSING_API_KEY=${VISUAL_CROSSING_API_KEY}
     depends_on:
+      - bot
       - db
       - redis
     ports:
@@ -50,7 +51,7 @@ services:
 
   db:
     image: postgres:13
-    container_name: postgres
+    container_name: weather_bot_db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
