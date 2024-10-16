@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: wb
+    command: >
+      /bin/bash -c "./pre-start.sh && poetry run python main.py"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - VISUAL_CROSSING_API_KEY=${VISUAL_CROSSING_API_KEY}
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8000:8000"
+  huey-worker:
+    build: .
+    container_name: wbot_huey_worker
+    command: >
+      /bin/bash -c "./pre-start.sh && poetry run huey_consumer.py tasks.huey"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - VISUAL_CROSSING_API_KEY=${VISUAL_CROSSING_API_KEY}
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8001:8001"
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
