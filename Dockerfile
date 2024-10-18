@@ -7,12 +7,6 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-#RUN echo 'show directory'
-#RUN ls -la /app
-#RUN echo 'end directory'
-RUN ls
-#RUN #ls -la /app > /app_contents.txt && cat /app_contents.txt
-
 # Install Poetry
 RUN pip install poetry
 
@@ -25,7 +19,3 @@ ENV PYTHONUNBUFFERED=1
 
 # Make our pre-start script executable
 RUN chmod +x /app/pre-start.sh
-
-#
-## Expose the port the app runs on
-#EXPOSE 8000

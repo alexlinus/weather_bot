@@ -1,16 +1,18 @@
 
-
 ## shortcuts
+build:
+	docker-compose build
 
-# db-makemigrations message='some_message'
-db-makemigrations:
-	alembic revision --autogenerate -m $(message)
-
-db-migrate:
-	alembic upgrade head
+stop:
+	docker-compose stop
 
 up:
-	docker compose up
+	docker-compose up -d
 
-build:
-	docker-compose build --progress=plain --no-cache
+launch:
+	echo "Started building images"
+	make build
+	echo "Stop previous version containers"
+	make stop
+	echo "Launch new version containers"
+	make up

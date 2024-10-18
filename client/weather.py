@@ -129,7 +129,7 @@ class ParsedForecast:
         }
 
         if message_type == MessageType.EVENING:
-            message = config.FORECAST_EVENING_MSG_FORMAT.format(
+            message = config.FORECAST_MESSAGE_FORMAT_EVENING.format(
                 **common_params,
                 # tomorrow
                 sunrise_time=self.tomorrow.sunrise,

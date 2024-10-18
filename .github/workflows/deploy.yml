@@ -43,10 +43,8 @@ jobs:
           export POSTGRES_USER="${{ vars.POSTGRES_USER }}"
           export REDIS_HOST="${{ vars.REDIS_HOST }}"
           export REDIS_PORT="${{ vars.REDIS_PORT }}"
-          docker-compose build
-          # Stop previous version
-          docker-compose stop
-          docker-compose up -d
+          # launch our app (commands described in Makefile)
+          make launch
 
 
 

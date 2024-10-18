@@ -30,8 +30,8 @@ SUBSCRIBER_ALREADY_EXIST_MSG = os.getenv(
     ),
 )
 
-FORECAST_EVENING_MSG_FORMAT = os.getenv(
-    "FORECAST_EVENING_MSG_FORMAT",
+FORECAST_MESSAGE_FORMAT_EVENING = os.getenv(
+    "FORECAST_MESSAGE_FORMAT_EVENING",
     default="""
 <b>Доброй ночи, {user_name}!</b> Вот тебе прогноз погоды на завтра в {city_name}е:
 {tomorrow_temp}°C (min {tomorrow_min_temp}°C, max {tomorrow_max_temp}°C) ({tomorrow_weather_condition}), 
@@ -46,7 +46,7 @@ FORECAST_EVENING_MSG_FORMAT = os.getenv(
 )
 
 FORECAST_MESSAGE_FORMAT_MORNING = os.getenv(
-    "FORECAST_MESSAGE_FORMAT",
+    "FORECAST_MESSAGE_FORMAT_MORNING",
     default="""
 <b>Доброе утро, {user_name}!</b> Вот тебе прогноз погоды на сегодня в {city_name}е:
 
@@ -71,5 +71,5 @@ VISUAL_CROSSING_BASE_API_URL = os.getenv(
     )
 )
 
-FORECAST_CITY_API_NAME = os.getenv("FORECAST_CITY_NAME", default="Bishkek")
+FORECAST_CITY_API_NAME = os.getenv("FORECAST_CITY_API_NAME", default="Bishkek")
 FORECAST_CITY_NAME = os.getenv("FORECAST_CITY_NAME", default="Бишкек")

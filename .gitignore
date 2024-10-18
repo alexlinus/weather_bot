@@ -8,3 +8,5 @@ __pycache__/
 
 *.sqllite3
 .env
+
+notes
