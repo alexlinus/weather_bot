@@ -41,7 +41,7 @@ FORECAST_MESSAGE_FORMAT_EVENING = os.getenv(
 Заход солнца: {sunset_time}
 
 Сейчас же за бортом:
-{current_temp}°C ({current_weather_condition}), скорость ветра {current_wind_speed}.
+{current_temp}°C ({current_weather_condition}), скорость ветра {current_wind_speed} м/c.
 """
 )
 
@@ -56,7 +56,7 @@ FORECAST_MESSAGE_FORMAT_MORNING = os.getenv(
 Заход солнца: {sunset_time}
 
 Сейчас же за бортом:
-{current_temp}°C ({current_weather_condition}), скорость ветра {current_wind_speed}.
+{current_temp}°C ({current_weather_condition}), скорость ветра {current_wind_speed} м/с.
 """
 )
 

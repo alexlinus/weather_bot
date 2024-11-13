@@ -6,7 +6,7 @@ from huey import crontab
 from client.utils import MessageType
 from client.weather import send_forecast
 
-huey = RedisHuey("weather_bot", host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=0)
+huey = RedisHuey("weather_bot", host=os.getenv("REDIS_HOST"), port=int(os.getenv("REDIS_PORT")), db=0)
 
 RETRY_DELAY_SECONDS = 360  # 5 minutes
 RETRY_COUNT = 2

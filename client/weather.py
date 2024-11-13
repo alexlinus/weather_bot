@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import dataclasses
 import datetime
+import logging
 
 import requests
+from telebot.apihelper import ApiTelegramException
 from translate import Translator
 
 import config
 from db.queries import SubscriberQueryRepo
 from main import session_pool, bot
 from client.utils import get_dates, MessageType
+
+logger = logging.getLogger(__name__)
 
 
 def _build_api_url(
@@ -167,11 +171,20 @@ def send_forecast(message_type: MessageType) -> None:
 
     parsed_forecast = fetch_forecast()
     for subscriber in subscribers:
-        bot.send_message(
-            chat_id=subscriber.telegram_id,
-            text=parsed_forecast.to_user_msg(
-                user_name=subscriber.first_name,
-                message_type=message_type,
-            ),
-            parse_mode="html",
-        )
+        try:
+            bot.send_message(
+                chat_id=subscriber.telegram_id,
+                text=parsed_forecast.to_user_msg(
+                    user_name=subscriber.first_name,
+                    message_type=message_type,
+                ),
+                parse_mode="html",
+            )
+        except ApiTelegramException as e:
+            logger.error(
+                "Error: Could not send forecast to Telegram user (%s): %s. Error: %s",
+                str(subscriber.telegram_id),
+                subscriber.first_name,
+                e.description,
+            )
+
